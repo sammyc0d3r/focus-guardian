@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindful Redirect</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: #e0e0e0;
+        }
+
+        .subtext {
+            font-size: 1.25rem;
+            color: #e0e0e0;
+            margin-bottom: 2rem;
+        }
+
+        .countdown {
+            font-size: 1.5rem;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .quotes-box {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            font-style: italic;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .goals-section {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            text-align: left;
+        }
+
+        .goal-input {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            gap: 1rem;
+        }
+
+        .goal-input span {
+            font-size: 1.2rem;
+            color: #e0e0e0;
+            width: 30px;
+        }
+
+        .goal-input input {
+            flex: 1;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .video-suggestions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .video-caption {
+            padding: 1rem;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        .split-image {
+            display: flex;
+            margin: 2rem 0;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 300px;
+        }
+
+        .split-image-half {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .split-image-half img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+        }
+
+        .split-image-text {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .reflection-box, .accountability-box {
+            margin: 2rem 0;
+            width: 100%;
+        }
+
+        .reflection-box textarea, .accountability-box textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            margin-top: 0.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            color: #fff;
+            background: linear-gradient(45deg, #e74c3c 0%, #c0392b 100%);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cta-button.secondary {
+            background: linear-gradient(45deg, #3498db 0%, #2980b9 100%);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .split-image {
+                flex-direction: column;
+                height: auto;
+            }
+            .split-image-half {
+                height: 200px;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .video-suggestions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <div class="audio-controls" onclick="toggleMusic()">
+        🔊
+    </div>
+
+    <div class="container">
+        <h1>Remember why you blocked this site.</h1>
+        
+        <div class="subtext">
+            Imagine ending this year with regret because you chose distraction over your dreams.
+        </div>
+
+        <div class="countdown" id="countdown">
+            Calculating time remaining...
+        </div>
+
+        <div class="quotes-box" id="quotes">
+            Loading quote...
+        </div>
+
+        <div class="goals-section">
+            <h2>Your Goals This Year</h2>
+            <p>What are you working towards? Keep your dreams in focus:</p>
+            <div class="goal-input">
+                <span>1.</span>
+                <input type="text" id="goal1" placeholder="Enter your first goal...">
+            </div>
+            <div class="goal-input">
+                <span>2.</span>
+                <input type="text" id="goal2" placeholder="Enter your second goal...">
+            </div>
+            <div class="goal-input">
+                <span>3.</span>
+                <input type="text" id="goal3" placeholder="Enter your third goal...">
+            </div>
+        </div>
+
+        <div class="split-image">
+            <div class="split-image-half">
+                <img src="images/loser.jpg" alt="Distraction">
+                <div class="split-image-text">The Path of Distraction</div>
+            </div>
+            <div class="split-image-half">
+                <img src="images/success.jpg" alt="Success">
+                <div class="split-image-text">The Path of Achievement</div>
+            </div>
+        </div>
+
+        <div class="accountability-box">
+            <h2>Message to Your Future Self</h2>
+            <p>Imagine it's December 31st. Write what you want to tell yourself if you didn't achieve your goals:</p>
+            <textarea id="futureMessage" placeholder="Dear future me..."></textarea>
+        </div>
+
+        <div class="reflection-box">
+            <h2>Your Reason for Change</h2>
+            <p>Why did you block this site? Write it here to remind yourself:</p>
+            <textarea id="reflection" placeholder="Type your reason here..."></textarea>
+        </div>
+
+        <h2>Watch These Before You Waste Another Minute</h2>
+        <div class="video-suggestions">
+            <div class="video-card">
+                <a href="https://www.youtube.com/watch?v=E15-W8mrWP8" target="_blank">
+                    <img src="https://img.youtube.com/vi/E15-W8mrWP8/hqdefault.jpg" alt="The Pain of Regret" class="video-thumbnail">
+                    <div class="video-caption">THE PAIN OF REGRET</div>
+                </a>
+            </div>
+            <div class="video-card">
+                <a href="https://www.youtube.com/watch?v=0HZtonZr3mw" target="_blank">
+                    <img src="https://img.youtube.com/vi/0HZtonZr3mw/hqdefault.jpg" alt="The Fear of Never Reaching Your Potential" class="video-thumbnail">
+                    <div class="video-caption">The Fear Is Never Reaching Your Potential</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="cta-button" onclick="window.close()">Close This Tab and Reclaim Your Time</button>
+            <a href="https://github.com" class="cta-button secondary">Return to Focus</a>
+        </div>
+    </div>
+
+    <script>
+        // Quotes rotation
+        const quotes = [
+            "A year from now, you'll wish you had started today.",
+            "Don't let your future self hate you for wasting this moment.",
+            "Distractions are the enemy of dreams.",
+            "Every moment spent here is a moment lost forever.",
+            "Your future is created by what you do today, not tomorrow."
+        ];
+
+        function rotateQuotes() {
+            const quotesElement = document.getElementById('quotes');
+            let currentIndex = 0;
+            setInterval(() => {
+                quotesElement.style.opacity = 0;
+                setTimeout(() => {
+                    quotesElement.textContent = quotes[currentIndex];
+                    quotesElement.style.opacity = 1;
+                    currentIndex = (currentIndex + 1) % quotes.length;
+                }, 500);
+            }, 5000);
+            quotesElement.textContent = quotes[0];
+        }
+
+        // Countdown timer
+        function updateCountdown() {
+            const now = new Date();
+            const endOfYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
+            const daysLeft = Math.ceil((endOfYear - now) / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown').textContent = 
+                `You have ${daysLeft} days left this year. How will you spend them?`;
+        }
+
+        // Save and load goals
+        const goalInputs = ['goal1', 'goal2', 'goal3'].map(id => document.getElementById(id));
+        goalInputs.forEach((input, index) => {
+            input.value = localStorage.getItem(`goal${index + 1}`) || '';
+            input.addEventListener('input', (e) => {
+                localStorage.setItem(`goal${index + 1}`, e.target.value);
+            });
+        });
+
+        // Save and load reflection
+        const reflection = document.getElementById('reflection');
+        reflection.value = localStorage.getItem('siteBlockReflection') || '';
+        reflection.addEventListener('input', (e) => {
+            localStorage.setItem('siteBlockReflection', e.target.value);
+        });
+
+        // Save and load future message
+        const futureMessage = document.getElementById('futureMessage');
+        futureMessage.value = localStorage.getItem('futureSelfMessage') || '';
+        futureMessage.addEventListener('input', (e) => {
+            localStorage.setItem('futureSelfMessage', e.target.value);
+        });
+
+        // Background music
+        let isPlaying = false;
+        const audio = document.getElementById('bgMusic');
+        const audioControl = document.querySelector('.audio-controls');
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                audioControl.textContent = '🔈';
+            } else {
+                audio.play();
+                audioControl.textContent = '🔊';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Initialize
+        rotateQuotes();
+        updateCountdown();
+        setInterval(updateCountdown, 60000); // Update countdown every minute
+    </script>
+</body>
+</html>
